@@ -1,0 +1,7 @@
+argparse>=1.4.0
+iso8601>=0.1.12
+pandas>=1.0.5
+pylint>=2.5.3
+pytest>=5.4.3
+tox>=3.16.1
+wheel>=0.34.2

@@ -1,0 +1,5 @@
+argparse
+iso8601
+pandas>=1.0.5
+wheel
+xlrd

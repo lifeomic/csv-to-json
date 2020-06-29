@@ -1,0 +1,9 @@
+.tox
+.vscode
+*.pyc
+__pycache__/
+tests.xml
+*.tsv
+*.csv
+*.json
+.DS_Store
