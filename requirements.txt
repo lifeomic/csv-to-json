@@ -1,5 +1,4 @@
-argparse
-iso8601
+argparse>=1.4.0
+iso8601>=0.1.12
 pandas>=1.0.5
-wheel
-xlrd
+wheel>=0.34.2
