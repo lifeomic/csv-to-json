@@ -22,7 +22,7 @@ These transformations apply to a specific column in the supplied .csv file. They
 
 ## JSON Structure Transformations
 
-- conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; if the condition evaluates to false, the object the transformation applies to and all subobjects are not included in the output; if the condition evaluates to true, the object the transformation applies to will be included in the output; if multiple conditions are included, they are ANDED together
+- deletion-conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; if the condition evaluates to false, the object the transformation applies to and all sub-objects are not included in the output; if the condition evaluates to true, the object the transformation applies to will be included in the output; if multiple deletion-conditions are included, they are automatically ANDED together
 
 ### Acceptable Conditional Comparisons:
 

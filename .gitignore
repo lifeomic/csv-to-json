@@ -7,3 +7,5 @@ tests.xml
 *.csv
 *.json
 .DS_Store
+venv/
+env/

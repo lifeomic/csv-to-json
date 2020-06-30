@@ -3,18 +3,20 @@ import json
 import pandas as pd
 
 
-def handle_conditional(conditional, table, index):
-    if 'condition' in conditional and conditional['condition'] in available_conditionals:
+def handle_conditional(conditional, df, index):
+    if ('condition' in conditional and
+            conditional['condition'] in available_conditionals):
         condition_function = available_conditionals[conditional['condition']]
-        cell_value = table[conditional['sourceCol']][index]
+        cell_value = df[conditional['sourceCol']][index]
         comparison = conditional['compareTo']
         return condition_function(cell_value, comparison)
 
 
-def handle_conditional_value(mapping, key, conditional, table, index, value):
-    if not key in mapping:
+def handle_conditional_value(mapping, key, conditional, df, index, value):
+    if key not in mapping:
         return
-    if (isinstance(conditional['values'][value], dict) and 'sourceCol' in conditional['values'][value]):
+    if (isinstance(conditional['values'][value], dict) and
+            'sourceCol' in conditional['values'][value]):
         mapping['sourceCol'] = conditional['values'][value]['sourceCol']
     else:
         string_value = conditional['values'][value]
@@ -22,18 +24,20 @@ def handle_conditional_value(mapping, key, conditional, table, index, value):
         mapping[key] = string_value
 
 
-def deletion_conditional(mapping, key, conditional, table, index):
-    if not handle_conditional(conditional, table, index) and (isinstance(mapping, list) or (isinstance(mapping, dict) and key in mapping)):
+def deletion_conditional(mapping, key, conditional, df, index):
+    if (not handle_conditional(conditional, df, index) and
+            (isinstance(mapping, list) or (isinstance(mapping, dict) and
+                                           key in mapping))):
         del mapping[key]
 
 
-def conditional(mapping, key, conditional, table, index):
-    if handle_conditional(conditional, table, index):
+def conditional(mapping, key, conditional, df, index):
+    if handle_conditional(conditional, df, index):
         handle_conditional_value(
-            mapping, key, conditional, table, index, 'true')
+            mapping, key, conditional, df, index, 'true')
     else:
         handle_conditional_value(
-            mapping, key, conditional, table, index, 'false')
+            mapping, key, conditional, df, index, 'false')
 
 
 def conditional_equal(cell_value, comparison):
@@ -66,15 +70,15 @@ def occupied(cell_value):
     return not pd.isnull(cell_value)
 
 
-def fill_json_values(lookup_key, var, table, index):
+def fill_json_values(lookup_key, var, df, index):
     for key, value in var.items():
         if isinstance(value, dict):
             if lookup_key in value:
-                var[key] = table[value[lookup_key]][index]
-            fill_json_values(lookup_key, value, table, index)
+                var[key] = df[value[lookup_key]][index]
+            fill_json_values(lookup_key, value, df, index)
         elif isinstance(value, list):
             for list_item in value:
-                fill_json_values(lookup_key, list_item, table, index)
+                fill_json_values(lookup_key, list_item, df, index)
 
 
 def item_generator(sub_map, lookup_key):
@@ -90,9 +94,9 @@ def item_generator(sub_map, lookup_key):
             yield from item_generator(list_item, lookup_key)
 
 
-def perform_generation_transforms(mappings, table, output_file):
+def perform_generation_transforms(mappings, df, output_file):
     with open(output_file, 'w') as o:
-        for index in table.index:
+        for index in df.index:
             mappings_copy = copy.deepcopy(mappings)
             sub_maps = list(item_generator(mappings_copy, 'transforms'))
             for sub_map in sub_maps:
@@ -103,7 +107,7 @@ def perform_generation_transforms(mappings, table, output_file):
                             for transform in sub_map[key]['transforms']:
                                 if 'type' in transform and transform['type'] in available_transforms:
                                     available_transforms[transform['type']](
-                                        sub_map, key, transform, table, index)
+                                        sub_map, key, transform, df, index)
                             if key in sub_map and 'transforms' in sub_map[key]:
                                 del sub_map[key]['transforms']
                 elif (isinstance(sub_map_copy, list)):
@@ -112,16 +116,17 @@ def perform_generation_transforms(mappings, table, output_file):
                         mapping_size = len(sub_map)
                         if (isinstance(list_item, dict)) and 'transforms' in list_item:
                             for transform in list_item['transforms']:
-                                if 'type' in transform and transform['type'] in available_transforms and not list_index >= len(sub_map):
+                                if ('type' in transform and transform['type'] in available_transforms and
+                                        not list_index >= len(sub_map)):
                                     available_transforms[transform['type']](
-                                        sub_map, list_index, transform, table, index)
+                                        sub_map, list_index, transform, df, index)
                             if not list_index >= len(sub_map) and 'transforms' in sub_map[list_index]:
                                 del sub_map[list_index]['transforms']
                         if mapping_size == len(sub_map):
                             list_index += 1
-            fill_json_values('sourceCol', mappings_copy, table, index)
+            fill_json_values('sourceCol', mappings_copy, df, index)
             o.write(json.dumps(mappings_copy) + '\n')
-    return table
+    return df
 
 
 available_transforms = {
