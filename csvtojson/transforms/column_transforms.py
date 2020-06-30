@@ -11,7 +11,7 @@ def default(sub_map, table, source_col, operation_col):
     default_value = sub_map['defaultValue']
     if default_value in available_default_values:
         default_value = available_default_values[default_value]
-        table[operation_col] = table[source_col].transform(
+        table[operation_col] = table[operation_col].transform(
             lambda x: str(default_value()) if pd.isnull(x) else x)
         return table
     table[operation_col] = table[source_col].transform(
@@ -46,17 +46,17 @@ def trim_whitespace(sub_map, table, source_col, operation_col):
     return table
 
 
-def uppercase(sub_map, table, source_col, operation_col):
-    table[operation_col] = table[operation_col].transform(
-        lambda x: x.upper() if not pd.isnull(x) else x)
-    return table
-
-
 def string_replacement(sub_map, table, source_col, operation_col):
     replacement_string = sub_map['replacementString']
     string_to_replace = sub_map['stringToReplace']
     table[operation_col] = table[operation_col].transform(lambda x: x.replace(
         string_to_replace, replacement_string) if not pd.isnull(x) else x)
+    return table
+
+
+def uppercase(sub_map, table, source_col, operation_col):
+    table[operation_col] = table[operation_col].transform(
+        lambda x: x.upper() if not pd.isnull(x) else x)
     return table
 
 
@@ -97,7 +97,6 @@ def perform_column_transforms(mappings, table):
     # this could be simplified greatly by simply looping through all sub_maps that have a valid type
     for sub_map in sub_maps:
         if (len(set(map(lambda transform: transform['type'], sub_map['transforms'])).intersection(available_transforms)) > 0):
-            print(sub_map)
             operation_col = source_col = str(uuid4())
             if 'sourceCol' in sub_map:
                 source_col = sub_map['sourceCol']
