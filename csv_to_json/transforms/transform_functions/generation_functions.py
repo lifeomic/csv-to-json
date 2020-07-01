@@ -26,7 +26,7 @@ def handle_conditional(conditional, df, index):
         return condition_function(cell_value, comparison)
 
 
-def handle_conditional_value(mapping, key, conditional, df, index, value):
+def handle_conditional_value(mapping, key, conditional, value):
     if key not in mapping:
         return
     if (isinstance(conditional['values'][value], dict) and
@@ -79,11 +79,12 @@ available_conditionals = {
     'greater-than': conditional_greater_than,
     'less-than-or-equal-to': conditional_less_than_or_equal_to,
     'greater-than-or-equal-to': conditional_greater_than_or_equal_to,
-    'not-eq': (lambda: not conditional_equal),
-    'not-less-than': (lambda: not conditional_less_than),
-    'not-greater-than': (lambda: not conditional_greater_than),
-    'not-less-than-or-equal-to': (lambda:
-                                  not conditional_less_than_or_equal_to),
-    'not-greater-than-or-equal-to': (lambda:
-                                     not conditional_greater_than_or_equal_to)
+    'not-eq': (lambda x, y: not conditional_equal(x, y)),
+    'not-less-than': (lambda x, y: not conditional_less_than(x, y)),
+    'not-greater-than': (lambda x, y: not conditional_greater_than(x, y)),
+    'not-less-than-or-equal-to': (lambda x, y:
+                                  not conditional_less_than_or_equal_to(x, y)),
+    'not-greater-than-or-equal-to': (lambda x, y:
+                                     not conditional_greater_than_or_equal_to
+                                     (x, y))
 }
