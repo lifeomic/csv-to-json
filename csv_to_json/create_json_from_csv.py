@@ -1,3 +1,5 @@
+"""Accepts input csv and mapping file and outputs JSON lines file"""
+
 import argparse
 import json
 import pandas as pd

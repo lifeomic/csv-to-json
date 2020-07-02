@@ -1,8 +1,10 @@
+"""Functions for each type of column transform"""
+
+from datetime import timedelta
+from uuid import uuid4
 import iso8601
 import numpy as np
 import pandas as pd
-from datetime import timedelta
-from uuid import uuid4
 
 
 def default(sub_map, df, source_col, op_col):

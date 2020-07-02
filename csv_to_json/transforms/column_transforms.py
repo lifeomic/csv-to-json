@@ -1,5 +1,7 @@
-import numpy as np
+"""Performs all column transformations upon the given dataframe"""
+
 from uuid import uuid4
+import numpy as np
 from transform_functions.column_functions import *
 
 
@@ -21,7 +23,8 @@ def perform_column_transforms(mappings, df):
     sub_maps = list(item_generator(mappings, 'transforms'))
     for sub_map in sub_maps:
         if (len(set(map(lambda transform: transform['type'],
-                        sub_map['transforms'])).intersection(available_transforms)) > 0):
+                        sub_map['transforms']))
+                .intersection(available_transforms)) > 0):
             op_col = source_col = str(uuid4())
             if 'sourceCol' in sub_map:
                 source_col = sub_map['sourceCol']
@@ -29,12 +32,14 @@ def perform_column_transforms(mappings, df):
             else:
                 df[op_col] = [np.nan for index in df.index]
             sub_map.update({'sourceCol': op_col})
-        for transform in sub_map['transforms']:
-            if 'type' in transform and transform['type'] in available_transforms:
-                df = available_transforms[transform['type']](
-                    transform, df, source_col, op_col)
-        if source_col not in list(df):
-            del sub_map['sourceCol']
+        filtered_transforms = filter(lambda x: (
+            'type' in x and
+            x['type'] in available_transforms), sub_map['transforms'])
+        for transform in filtered_transforms:
+            df = available_transforms[transform['type']](
+                transform, df, source_col, op_col)
+            if source_col not in list(df):
+                del sub_map['sourceCol']
     return (mappings, df)
 
 

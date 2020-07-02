@@ -1,3 +1,5 @@
+"""Functions for each type of generation transform"""
+
 import pandas as pd
 
 
@@ -28,6 +30,7 @@ def check_conditional(conditional, df, index):
         cell_value = df[conditional['sourceCol']][index]
         comparison = conditional['compareTo']
         return condition_function(cell_value, comparison)
+    return False
 
 
 def handle_conditional_value(mapping, key, conditional, value):

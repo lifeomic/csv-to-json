@@ -1,3 +1,5 @@
+"""Utility function to transform an excel file to csv or tsv file"""
+
 import argparse
 import pandas as pd
 

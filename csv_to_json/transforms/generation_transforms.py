@@ -1,3 +1,5 @@
+"""Performs all generation transforms on the given dataframe"""
+
 import copy
 import json
 from transform_functions.generation_transforms import *
@@ -31,41 +33,47 @@ def item_generator(sub_map, lookup_key):
 
 def perform_generation_transforms(mappings, df, output_file):
     """Performs all generation transforms on the dataframe and outputs"""
-    with open(output_file, 'w') as out:
-        for index in df.index:
-            mappings_copy = copy.deepcopy(mappings)
-            sub_maps = list(item_generator(mappings_copy, 'transforms'))
-            for sub_map in sub_maps:
-                sub_map_copy = copy.deepcopy(sub_map)
-                if (isinstance(sub_map_copy, dict)):
-                    for key in sub_map_copy:
-                        if 'transforms' in sub_map[key]:
-                            for transform in sub_map[key]['transforms']:
-                                if 'type' in transform and transform['type'] in available_transforms:
-                                    available_transforms[transform['type']](
-                                        sub_map, key, transform, df, index)
-                            if key in sub_map and 'transforms' in sub_map[key]:
-                                del sub_map[key]['transforms']
-                elif (isinstance(sub_map_copy, list)):
-                    list_index = 0
-                    for list_item in sub_map_copy:
-                        mapping_size = len(sub_map)
-                        if (isinstance(list_item, dict)) and 'transforms' in list_item:
-                            for transform in list_item['transforms']:
-                                if ('type' in transform and transform['type'] in available_transforms and
-                                        not list_index >= len(sub_map)):
-                                    available_transforms[transform['type']](
-                                        sub_map, list_index, transform, df, index)
-                            if not list_index >= len(sub_map) and 'transforms' in sub_map[list_index]:
-                                del sub_map[list_index]['transforms']
-                        if mapping_size == len(sub_map):
-                            list_index += 1
-            fill_json_values('sourceCol', mappings_copy, df, index)
-            out.write(json.dumps(mappings_copy) + '\n')
+    out = open(output_file, 'w')
+    for index in df.index:
+        mappings_copy = copy.deepcopy(mappings)
+        sub_maps = list(item_generator(mappings_copy, 'transforms'))
+        for sub_map in filter(lambda x: isinstance(x, dict), sub_maps):
+            sub_map_copy = copy.deepcopy(sub_map)
+            for key in filter(lambda x: 'transforms' in sub_map[x],
+                              sub_map_copy):
+                for transform in filter(lambda x: 'type' in x and x['type'] in
+                                        available_transforms,
+                                        sub_map[key]['transforms']):
+                    available_transforms[transform['type']](
+                        sub_map, key, transform, df, index)
+                if key in sub_map and 'transforms' in sub_map[key]:
+                    del sub_map[key]['transforms']
+        for sub_map in filter(lambda x: isinstance(x, list), sub_maps):
+            sub_map_copy = copy.deepcopy(sub_map)
+            list_index = 0
+            for list_item in filter(lambda x: isinstance(x, dict) and
+                                    'transforms' in list_item, sub_map_copy):
+                mapping_size = len(sub_map)
+                for transform in filter(lambda x: 'type' in x and
+                                        x['type'] in available_transforms,
+                                        list_item['transforms']):
+                    if not list_index >= len(sub_map):
+                        available_transforms[transform['type']](
+                            sub_map, list_index, transform, df, index)
+                if (not list_index >= len(sub_map) and
+                        'transforms' in sub_map[list_index]):
+                    del sub_map[list_index]['transforms']
+                if mapping_size == len(sub_map):
+                    list_index += 1
+        fill_json_values('sourceCol', mappings_copy, df, index)
+        out.write(json.dumps(mappings_copy) + '\n')
+    out.close()
     return df
 
 
 available_transforms = {
     'deletion-conditional': deletion_conditional,
     'conditional': standard_conditional
+
+
 }

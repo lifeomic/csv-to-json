@@ -1,3 +1,5 @@
+"""Performs all file transforms on the given dataframe"""
+
 from transform_functions.file_transforms import *
 
 
