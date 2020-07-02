@@ -2,7 +2,7 @@
 
 import copy
 import json
-from transform_functions.generation_transforms import *
+from csv_to_json.transforms.transform_functions.generation_functions import *
 
 
 def fill_json_values(lookup_key, var, df, index):
@@ -74,6 +74,4 @@ def perform_generation_transforms(mappings, df, output_file):
 available_transforms = {
     'deletion-conditional': deletion_conditional,
     'conditional': standard_conditional
-
-
 }

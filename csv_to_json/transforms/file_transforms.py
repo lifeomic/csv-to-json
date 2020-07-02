@@ -1,6 +1,6 @@
 """Performs all file transforms on the given dataframe"""
 
-from transform_functions.file_transforms import *
+from csv_to_json.transforms.transform_functions.file_functions import *
 
 
 def perform_file_transforms(mappings, df):

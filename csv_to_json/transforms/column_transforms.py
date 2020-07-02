@@ -2,7 +2,7 @@
 
 from uuid import uuid4
 import numpy as np
-from transform_functions.column_functions import *
+from csv_to_json.transforms.transform_functions.column_functions import *
 
 
 def item_generator(sub_map, lookup_key):
