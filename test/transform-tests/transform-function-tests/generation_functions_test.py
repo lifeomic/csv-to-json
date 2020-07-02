@@ -18,6 +18,112 @@ def test_deletion_conditional():
     assert(not mapping and 'key' not in mapping)
 
 
+def test_conditional():
+    df = pd.DataFrame.from_dict({'value_one': ['foo']})
+    mapping = {
+        'value': {
+            'transforms': [
+                {
+                    'type': 'conditional',
+                    'condition': 'eq',
+                    'sourceCol': 'value_one',
+                    'compareTo': 'foo',
+                    'values': {
+                        'true': 'bar',
+                        'false': {
+                            'sourceCol': 'fill_in_value'
+                        }
+                    }
+                }
+            ]
+        }
+    }
+    conditional(mapping, 'value', mapping['value']['transforms'][0], df, 0)
+    assert(mapping['value'] == 'bar')
+    df = pd.DataFrame.from_dict(
+        {'value_one': ['bar'], 'fill_in_value': ['baz']})
+    mapping = {
+        'value': {
+            'transforms': [
+                {
+                    'type': 'conditional',
+                    'condition': 'eq',
+                    'sourceCol': 'value_one',
+                    'compareTo': 'foo',
+                    'values': {
+                        'true': 'bar',
+                        'false': {
+                            'sourceCol': 'fill_in_value'
+                        }
+                    }
+                }
+            ]
+        }
+    }
+    conditional(mapping, 'value', mapping['value']['transforms'][0], df, 0)
+    assert('sourceCol' in mapping['value'] and
+           mapping['value']['sourceCol'] == 'fill_in_value')
+
+
+def test_check_conditional():
+    df = pd.DataFrame.from_dict({'value_one': ['4']})
+    conditional = {
+        'type': 'conditional',
+        'condition': 'not-less-than',
+        'sourceCol': 'value_one',
+        'compareTo': '3'
+    }
+    assert(check_conditional(conditional, df, 0))
+    df = pd.DataFrame.from_dict({'value_one': ['2']})
+    assert(not check_conditional(conditional, df, 0))
+
+
+def test_handle_conditional_value():
+    mapping = {
+        'value': {
+            'transforms': [
+                {
+                    'type': 'conditional',
+                    'condition': 'eq',
+                    'sourceCol': 'value_one',
+                    'compareTo': 'foo',
+                    'values': {
+                        'true': 'bar',
+                        'false': {
+                            'sourceCol': 'fill_in_value'
+                        }
+                    }
+                }
+            ]
+        }
+    }
+    handle_conditional_value(
+        mapping, 'value', mapping['value']['transforms'][0], 'true')
+    assert(mapping['value'] == 'bar')
+    mapping = {
+        'value': {
+            'transforms': [
+                {
+                    'type': 'conditional',
+                    'condition': 'eq',
+                    'sourceCol': 'value_one',
+                    'compareTo': 'foo',
+                    'values': {
+                        'true': 'bar',
+                        'false': {
+                            'sourceCol': 'fill_in_value'
+                        }
+                    }
+                }
+            ]
+        }
+    }
+    handle_conditional_value(
+        mapping, 'value', mapping['value']['transforms'][0], 'false')
+    assert('sourceCol' in mapping['value'] and
+           mapping['value']['sourceCol'] == 'fill_in_value')
+
+
 def test_conditional_equal():
     assert(conditional_equal(3, 3))
     assert(conditional_equal('foo', 'foo'))

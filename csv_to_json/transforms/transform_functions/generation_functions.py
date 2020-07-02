@@ -2,22 +2,22 @@ import pandas as pd
 
 
 def deletion_conditional(mapping, key, conditional, df, index):
-    if (not handle_conditional(conditional, df, index) and
+    if (not check_conditional(conditional, df, index) and
             (isinstance(mapping, list) or (isinstance(mapping, dict) and
                                            key in mapping))):
         del mapping[key]
 
 
 def conditional(mapping, key, conditional, df, index):
-    if handle_conditional(conditional, df, index):
+    if check_conditional(conditional, df, index):
         handle_conditional_value(
-            mapping, key, conditional, df, index, 'true')
+            mapping, key, conditional, 'true')
     else:
         handle_conditional_value(
-            mapping, key, conditional, df, index, 'false')
+            mapping, key, conditional, 'false')
 
 
-def handle_conditional(conditional, df, index):
+def check_conditional(conditional, df, index):
     if ('condition' in conditional and
             conditional['condition'] in available_conditionals):
         condition_function = available_conditionals[conditional['condition']]
@@ -31,7 +31,8 @@ def handle_conditional_value(mapping, key, conditional, value):
         return
     if (isinstance(conditional['values'][value], dict) and
             'sourceCol' in conditional['values'][value]):
-        mapping['sourceCol'] = conditional['values'][value]['sourceCol']
+        mapping[key]['sourceCol'] = conditional['values'][value]['sourceCol']
+        del mapping[key]['transforms']
     else:
         string_value = conditional['values'][value]
         del mapping[key]['transforms']
