@@ -4,6 +4,7 @@ from transform_functions.column_functions import *
 
 
 def item_generator(sub_map, lookup_key):
+    """Returns all dictionaries containing the lookup key"""
     if isinstance(sub_map, dict):
         for key, value in sub_map.items():
             if key == lookup_key:
@@ -16,6 +17,7 @@ def item_generator(sub_map, lookup_key):
 
 
 def perform_column_transforms(mappings, df):
+    """Performs all column transforms in the mapping on the dataframe"""
     sub_maps = list(item_generator(mappings, 'transforms'))
     for sub_map in sub_maps:
         if (len(set(map(lambda transform: transform['type'],

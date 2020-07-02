@@ -8,8 +8,8 @@ def test_default():
     df['operation_col'] = df['generic_string']
     df = default(
         sub_map, df, 'generic_string', 'operation_col')
-    assert(list(df['generic_string']) == ['foo', None])
-    assert(list(df['operation_col']) == ['foo', 'bar'])
+    assert list(df['generic_string']) == ['foo', None]
+    assert list(df['operation_col']) == ['foo', 'bar']
 
 
 def test_default_uuid():
@@ -17,8 +17,8 @@ def test_default_uuid():
     sub_map = {'defaultValue': 'uuid'}
     df = default(
         sub_map, df, 'source_col', 'operation_col')
-    assert(not pd.isnull(df['operation_col'][0]) and
-           len(df['operation_col'][0]) == 36)
+    assert (not pd.isnull(df['operation_col'][0]) and
+            len(df['operation_col'][0]) == 36)
 
 
 def test_time_delta():
@@ -27,9 +27,9 @@ def test_time_delta():
     sub_map = {'baseCol': 'base_time', 'days': {
         'sourceCol': 'day_shift'}, 'hours': 3}
     df = time_delta(sub_map, df, None, 'operation_col')
-    assert(df['base_time'][0] ==
-           '1988-7-8 07:22' and df['day_shift'][0] == '5')
-    assert(df['operation_col'][0] == '1988-07-13 10:22:00+00:00')
+    assert (df['base_time'][0] ==
+            '1988-7-8 07:22' and df['day_shift'][0] == '5')
+    assert df['operation_col'][0] == '1988-07-13 10:22:00+00:00'
 
 
 def test_trim_whitespace():
@@ -38,9 +38,9 @@ def test_trim_whitespace():
     df['operation_col'] = df['whitespace_words']
     df = trim_whitespace(
         {}, df, 'whitespace_words', 'operation_col')
-    assert(list(df['whitespace_words']) ==
-           ['     wordone      ', 'wordtwo'])
-    assert(list(df['operation_col']) == ['wordone', 'wordtwo'])
+    assert (list(df['whitespace_words']) ==
+            ['     wordone      ', 'wordtwo'])
+    assert list(df['operation_col']) == ['wordone', 'wordtwo']
 
 
 def test_uppercase():
@@ -48,8 +48,8 @@ def test_uppercase():
     df['operation_col'] = df['lowercase_words']
     df = uppercase(
         {}, df, 'lowercase_words', 'operation_col')
-    assert(df['lowercase_words'][0] == 'word ONE')
-    assert(df['operation_col'][0] == 'WORD ONE')
+    assert df['lowercase_words'][0] == 'word ONE'
+    assert df['operation_col'][0] == 'WORD ONE'
 
 
 def test_lowercase():
@@ -57,8 +57,8 @@ def test_lowercase():
     df['operation_col'] = df['uppercase_words']
     df = lowercase(
         {}, df, 'uppercase_words', 'operation_col')
-    assert(df['uppercase_words'][0] == 'WORD one')
-    assert(df['operation_col'][0] == 'word one')
+    assert df['uppercase_words'][0] == 'WORD one'
+    assert df['operation_col'][0] == 'word one'
 
 
 def test_format_date():
@@ -66,8 +66,8 @@ def test_format_date():
     df['operation_col'] = df['unformatted_date']
     df = format_date(
         {}, df, 'unformatted_date', 'operation_col')
-    assert(df['unformatted_date'][0] == '1988-7-8 07:22')
-    assert(df['operation_col'][0] == '1988-07-08 07:22:00+00:00')
+    assert df['unformatted_date'][0] == '1988-7-8 07:22'
+    assert df['operation_col'][0] == '1988-07-08 07:22:00+00:00'
 
 
 def test_string_concatenation():
@@ -76,5 +76,5 @@ def test_string_concatenation():
     df['operation_col'] = df['generic_string']
     df = string_concatenation(
         sub_map, df, 'generic_string', 'operation_col')
-    assert(df['generic_string'][0] == 'foo')
-    assert(df['operation_col'][0] == 'bar foo baz')
+    assert df['generic_string'][0] == 'foo'
+    assert df['operation_col'][0] == 'bar foo baz'

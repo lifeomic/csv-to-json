@@ -2,13 +2,16 @@ import pandas as pd
 
 
 def deletion_conditional(mapping, key, conditional, df, index):
+    """Deletes the given key from the mapping if the condition is false"""
     if (not check_conditional(conditional, df, index) and
             (isinstance(mapping, list) or (isinstance(mapping, dict) and
                                            key in mapping))):
         del mapping[key]
 
 
-def conditional(mapping, key, conditional, df, index):
+def standard_conditional(mapping, key, conditional, df, index):
+    """Sets the given key from the mapping to the true value if
+       true or to the false value if false"""
     if check_conditional(conditional, df, index):
         handle_conditional_value(
             mapping, key, conditional, 'true')
@@ -18,6 +21,7 @@ def conditional(mapping, key, conditional, df, index):
 
 
 def check_conditional(conditional, df, index):
+    """Evalutates the conditional, returning true or false"""
     if ('condition' in conditional and
             conditional['condition'] in available_conditionals):
         condition_function = available_conditionals[conditional['condition']]
@@ -27,6 +31,7 @@ def check_conditional(conditional, df, index):
 
 
 def handle_conditional_value(mapping, key, conditional, value):
+    """Handles the remapping based on the outcome of the conditional"""
     if key not in mapping:
         return
     if (isinstance(conditional['values'][value], dict) and
@@ -40,32 +45,43 @@ def handle_conditional_value(mapping, key, conditional, value):
 
 
 def conditional_equal(cell_value, comparison):
+    """Returns true if the two values are equal, false otherwise"""
     if comparison in available_comparison_values:
         return available_comparison_values[comparison](cell_value)
     return cell_value == comparison
 
 
 def conditional_less_than(cell_value, comparison):
+    """Returns true if the cell value is less than the comparison,
+       false otherwise"""
     return float(cell_value) < float(comparison)
 
 
 def conditional_greater_than(cell_value, comparison):
+    """Returns true if the cell value is greater than the comparison,
+       false otherwise"""
     return float(cell_value) > float(comparison)
 
 
 def conditional_less_than_or_equal_to(cell_value, comparison):
+    """Returns true if the cell value is less than or equal to
+       the comparison, false otherwise"""
     return float(cell_value) <= float(comparison)
 
 
 def conditional_greater_than_or_equal_to(cell_value, comparison):
+    """Returns true if the cell value is greater than or equal to
+       the comparison, false otherwise"""
     return float(cell_value) >= float(comparison)
 
 
 def empty(cell_value):
+    """Returns true if the cell values is null, false otherwise"""
     return pd.isnull(cell_value)
 
 
 def occupied(cell_value):
+    """Returns true if the cell value is not null, false otherwise"""
     return not pd.isnull(cell_value)
 
 

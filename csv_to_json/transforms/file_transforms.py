@@ -2,6 +2,7 @@ from transform_functions.file_transforms import *
 
 
 def perform_file_transforms(mappings, df):
+    """Performs all file transforms on the dataframe"""
     if 'file-transforms' not in mappings:
         return (mappings, df)
     for transform in mappings['file-transforms']:

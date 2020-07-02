@@ -4,6 +4,7 @@ from transform_functions.generation_transforms import *
 
 
 def fill_json_values(lookup_key, var, df, index):
+    """Recursively builds and returns each JSON object from the mappings"""
     for key, value in var.items():
         if isinstance(value, dict):
             if lookup_key in value:
@@ -15,6 +16,7 @@ def fill_json_values(lookup_key, var, df, index):
 
 
 def item_generator(sub_map, lookup_key):
+    """Returns all objects with dictionaries that contain the lookup key"""
     if isinstance(sub_map, dict):
         for _, value in sub_map.items():
             if lookup_key in value:
@@ -28,7 +30,8 @@ def item_generator(sub_map, lookup_key):
 
 
 def perform_generation_transforms(mappings, df, output_file):
-    with open(output_file, 'w') as o:
+    """Performs all generation transforms on the dataframe and outputs"""
+    with open(output_file, 'w') as out:
         for index in df.index:
             mappings_copy = copy.deepcopy(mappings)
             sub_maps = list(item_generator(mappings_copy, 'transforms'))
@@ -58,11 +61,11 @@ def perform_generation_transforms(mappings, df, output_file):
                         if mapping_size == len(sub_map):
                             list_index += 1
             fill_json_values('sourceCol', mappings_copy, df, index)
-            o.write(json.dumps(mappings_copy) + '\n')
+            out.write(json.dumps(mappings_copy) + '\n')
     return df
 
 
 available_transforms = {
     'deletion-conditional': deletion_conditional,
-    'conditional': conditional
+    'conditional': standard_conditional
 }

@@ -1,0 +1,15 @@
+[MASTER]
+
+disable=unused-argument,
+        wildcard-import,
+        undefined-variable,
+        import-error,
+        no-name-in-module
+
+[VARIABLES]
+
+argument-rgx=^[a-z][a-z0-9]*((_[a-z0-9]+)*)?$
+
+[FORMAT]
+
+max-line-length=79
