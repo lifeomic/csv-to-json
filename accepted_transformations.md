@@ -16,7 +16,7 @@ These transformations apply to a specific column in the supplied .csv file. They
 - uppercase: Capitalizes all characters in all cells in the **sourceCol** (1)
 - lowercase: Convert all characters in all cells in the **sourceCol** to lowercase (1)
 - string-replacement: Convert all instances of the **stringToReplace** with **replacementString** in all cells in the **sourceCol** (1)
-- substring: **NEED TO DO THIS**
+- substring: Slices a string from the **startIndex** to the **endIndex**; only one field is required (1)
 - default: Changes all empty cells in the **sourceCol** to the provided **defaultValue** (1)
 - string-concatenation: Adds the **beforeString** before any text in the **sourceCol** and the **afterString** after any text in the **sourceCol** (1)
 - format-date: Formats the date found in all cells in the **sourceCol** according to iso8601 (1)

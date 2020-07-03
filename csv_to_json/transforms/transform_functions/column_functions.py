@@ -116,6 +116,15 @@ def string_concatenation(sub_map, df, source_col, op_col):
     return df
 
 
+def substring(sub_map, df, source_col, op_col):
+    startIndex = int(sub_map['startIndex']
+                     ) if 'startIndex' in sub_map else 0
+    endIndex = int(sub_map['endIndex']) if 'endIndex' in sub_map else None
+    df[op_col] = df[op_col].transform(
+        lambda x: x[startIndex:endIndex] if not pd.isnull(x) else x)
+    return df
+
+
 available_default_values = {
     'uuid': uuid4
 }

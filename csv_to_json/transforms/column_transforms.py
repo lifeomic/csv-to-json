@@ -48,6 +48,7 @@ available_transforms = {
     'trim-whitespace': trim_whitespace,
     'uppercase': uppercase,
     'lowercase': lowercase,
+    'substring': substring,
     'string-replacement': string_replacement,
     'string-concatenation': string_concatenation,
     'time-delta': time_delta,

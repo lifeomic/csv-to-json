@@ -78,3 +78,20 @@ def test_string_concatenation():
         sub_map, df, 'generic_string', 'operation_col')
     assert df['generic_string'][0] == 'foo'
     assert df['operation_col'][0] == 'bar foo baz'
+
+
+def test_substring():
+    df = pd.DataFrame.from_dict({'full_string': ['long string']})
+    df['operation_col'] = df['full_string']
+    sub_map = {'startIndex': '1', 'endIndex': '4'}
+    df = substring(sub_map, df, 'full_string', 'operation_col')
+    assert df['full_string'][0] == 'long string'
+    assert df['operation_col'][0] == 'ong'
+    df['operation_col'] = df['full_string']
+    sub_map = {'startIndex': '5'}
+    df = substring(sub_map, df, 'full_string', 'operation_col')
+    assert df['operation_col'][0] == 'string'
+    df['operation_col'] = df['full_string']
+    sub_map = {'endIndex': '4'}
+    df = substring(sub_map, df, 'full_string', 'operation_col')
+    assert df['operation_col'][0] == 'long'
