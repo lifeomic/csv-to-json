@@ -22,6 +22,10 @@ These transformations apply to a specific column in the supplied .csv file. They
 - format-date: Formats the date found in all cells in the **sourceCol** according to iso8601 (1)
 - time-delta: Adds the supplied **days**, and **hours** to the supplied **baseCol**; columns or fixed values are accepted for any of the fields; only one field other than **baseCol** is required (2)
 
+(1): **sourceCol** required
+
+(2): **sourceCol** not accepted
+
 ## JSON Structure Transformations
 
 ### Conditionals
@@ -43,7 +47,3 @@ Conditionals are a more advanced transform type that perform a conditional check
 - not-greater-than
 - not-less-than-or-equal-to
 - not-greater-than-or-equal-to
-
-(1): **sourceCol** required
-
-(2): **sourceCol** not accepted
