@@ -1,5 +1,7 @@
 # Accepted Transformations
 
+Note that the order for transform types is file transformations then column transformations and finally JSON structure transformations. Within each transform list, transformations of the same category are performed in the order they are listed in the mapping file.
+
 ## File Transformations
 
 These transformations apply to the entire supplied .csv file and occur before any other transformations.
@@ -22,11 +24,25 @@ These transformations apply to a specific column in the supplied .csv file. They
 
 ## JSON Structure Transformations
 
-- deletion-conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; if the condition evaluates to false, the object the transformation applies to and all sub-objects are not included in the output; if the condition evaluates to true, the object the transformation applies to will be included in the output; if multiple deletion-conditions are included, they are automatically ANDED together
+### Conditionals
 
-### Acceptable Conditional Comparisons:
+Conditionals are a more advanced transform type that perform a conditional check on the given values. Note that **empty** and **occupied** are accepted as **compareTo** values with the **eq** **comparison**. **empty** returns true if the given cell is empty and false otherwise. **occupied** returns true if the given cell is occupied and false otherwise.
 
--
+- conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; a **values** object must be provided in the transform with a **true** value and a **false** value; **true** and **false** can be fixed or column values
+- deletion-conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; if the condition evaluates to false, the object the transformation applies to and all sub-objects are not included in the output; if the condition evaluates to true, the object the transformation applies to will be included in the output; if multiple deletion-conditions are included, they are automatically ANDED together, meaning all deletion-conditionals present must evaluate to true for the object to be included in the output
+
+#### Acceptable Conditional Comparisons
+
+- eq
+- less-than
+- greater-than
+- less-than-or-equal-to
+- greater-than-or-equal-to
+- not-eq
+- not-less-than
+- not-greater-than
+- not-less-than-or-equal-to
+- not-greater-than-or-equal-to
 
 (1): **sourceCol** required
 
