@@ -39,11 +39,11 @@ def perform_generation_transforms(mappings, df, output_file):
         sub_maps = list(item_generator(mappings_copy, 'transforms'))
         for sub_map in filter(lambda x: isinstance(x, dict), sub_maps):
             sub_map_copy = copy.deepcopy(sub_map)
-            for key in filter(lambda x: 'transforms' in sub_map[x],
-                              sub_map_copy):
+            for key in dict(filter(lambda x: 'transforms' in x[1],
+                                   sub_map_copy.items())):
                 for transform in filter(lambda x: 'type' in x and x['type'] in
                                         available_transforms,
-                                        sub_map[key]['transforms']):
+                                        sub_map_copy[key]['transforms']):
                     available_transforms[transform['type']](
                         sub_map, key, transform, df, index)
                 if key in sub_map and 'transforms' in sub_map[key]:
@@ -52,7 +52,7 @@ def perform_generation_transforms(mappings, df, output_file):
             sub_map_copy = copy.deepcopy(sub_map)
             list_index = 0
             for list_item in filter(lambda x: isinstance(x, dict) and
-                                    'transforms' in list_item, sub_map_copy):
+                                    'transforms' in x, sub_map_copy):
                 mapping_size = len(sub_map)
                 for transform in filter(lambda x: 'type' in x and
                                         x['type'] in available_transforms,

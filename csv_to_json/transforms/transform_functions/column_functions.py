@@ -27,15 +27,18 @@ def time_delta(sub_map, df, source_col, op_col):
     base_col = sub_map['baseCol']
     df[op_col] = df[base_col]
     deltas = ['days', 'hours']
-    for key in (set(deltas).intersection(key for key in sub_map
-                                         if (isinstance(sub_map[key], dict) and
-                                             'sourceCol' in sub_map[key]))):
+    key = None
+    for key in (set(deltas)
+                .intersection(
+                    k for k in sub_map if (isinstance(sub_map[k], dict) and
+                                           'sourceCol' in sub_map[k]))):
+        # pylint: disable=undefined-loop-variable
         if key == 'days':
             df[op_col] = \
                 (df.apply(lambda r:
                           (str(iso8601.parse_date(r[op_col]) +
-                               timedelta(
-                               days=float(r[sub_map[key]['sourceCol']])))
+                               timedelta(days=float(
+                                   r[sub_map[key]['sourceCol']])))
                            if (not pd.isnull(r[op_col]) and
                                not pd.isnull(r[sub_map[key]['sourceCol']]))
                            else r[op_col]), axis=1))
@@ -43,8 +46,8 @@ def time_delta(sub_map, df, source_col, op_col):
             df[op_col] = \
                 df.apply(lambda r:
                          str(iso8601.parse_date(r[op_col]) +
-                             timedelta(
-                             hours=float(r[sub_map[key]['sourceCol']])))
+                             timedelta(hours=float(
+                                 r[sub_map[key]['sourceCol']])))
                          if (not pd.isnull(r[op_col]) and
                              not pd.isnull(r[sub_map[key]['sourceCol']]))
                          else r[op_col], axis=1)

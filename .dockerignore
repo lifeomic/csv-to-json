@@ -1,0 +1,15 @@
+venv
+.vscode
+.tox
+*.egg-info
+.pylintrc
+accepted_transformations.md
+test_requirements.txt
+tests.xml
+tox.ini
+Makefile
+Dockerfile
+test
+*.csv
+*.tsv
+*.json
