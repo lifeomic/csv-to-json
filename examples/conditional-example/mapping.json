@@ -1,0 +1,45 @@
+{
+  "store number": "12",
+  "item": {
+    "sourceCol": "Item"
+  },
+  "purchase date": {
+    "sourceCol": "Purchase Date",
+    "transforms": [
+      {
+        "type": "format-date"
+      }
+    ]
+  },
+  "sold date": {
+    "transforms": [
+      {
+        "type": "time-delta",
+        "baseCol": "Purchase Date",
+        "days": {
+          "sourceCol": "Days Until Sold"
+        }
+      },
+      {
+        "type": "deletion-conditional",
+        "sourceCol": "Days Until Sold",
+        "compareTo": "occupied",
+        "condition": "eq"
+      }
+    ]
+  },
+  "product category": {
+    "transforms": [
+      {
+        "type": "conditional",
+        "sourceCol": "Item",
+        "compareTo": "pasta",
+        "condition": "eq",
+        "values": {
+          "true": "entree",
+          "false": "dessert"
+        }
+      }
+    ]
+  }
+}

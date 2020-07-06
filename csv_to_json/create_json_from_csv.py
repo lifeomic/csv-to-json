@@ -20,7 +20,7 @@ parser.add_argument('-o', metavar='Output File', dest='output_file',
 parser.add_argument('-s', metavar='Input File Separation',
                     dest='separation', required=False,
                     help='The character that separates values in the csv',
-                    default='\t')
+                    default=',')
 parser.add_argument('-ocsv', metavar='Output CSV File', dest='output_csv',
                     required=False,
                     help='Optional field output the modified csv file if \

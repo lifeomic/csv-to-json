@@ -1,0 +1,26 @@
+{
+  "file-transforms": [
+    {
+      "type": "dictionary-from-file",
+      "inputFile": "examples/file-dictionary-example/dictionary.csv",
+      "dictionaryName": "locations",
+      "keyCol": "Item",
+      "valueCol": "Aisle"
+    }
+  ],
+  "store number": "12",
+  "item": {
+    "sourceCol": "Item"
+  },
+  "aisle": {
+    "transforms": [
+      {
+        "type": "fill-from-dictionary",
+        "dictionaryName": "locations",
+        "key": {
+          "sourceCol": "Item"
+        }
+      }
+    ]
+  }
+}

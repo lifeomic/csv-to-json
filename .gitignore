@@ -6,6 +6,7 @@ tests.xml
 *.tsv
 *.csv
 *.json
+!examples/*/*
 .DS_Store
 venv/
 env/

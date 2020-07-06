@@ -1,0 +1,40 @@
+{
+  "store number": "12",
+  "item": {
+    "sourceCol": "Item",
+    "transforms": [
+      {
+        "type": "substring",
+        "startIndex": 6
+      },
+      {
+        "type": "uppercase"
+      }
+    ]
+  },
+  "price": {
+    "sourceCol": "Price"
+  },
+  "quantity": {
+    "sourceCol": "Quantity"
+  },
+  "purchase date": {
+    "sourceCol": "Purchase Date",
+    "transforms": [
+      {
+        "type": "format-date"
+      }
+    ]
+  },
+  "sold date": {
+    "transforms": [
+      {
+        "type": "time-delta",
+        "baseCol": "Purchase Date",
+        "days": {
+          "sourceCol": "Days Until Sold"
+        }
+      }
+    ]
+  }
+}

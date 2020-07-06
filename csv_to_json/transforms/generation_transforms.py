@@ -21,7 +21,7 @@ def item_generator(sub_map, lookup_key):
     """Returns all objects with dictionaries that contain the lookup key"""
     if isinstance(sub_map, dict):
         for _, value in sub_map.items():
-            if lookup_key in value:
+            if isinstance(value, dict) and lookup_key in value:
                 yield sub_map
             yield from item_generator(value, lookup_key)
     elif isinstance(sub_map, list):

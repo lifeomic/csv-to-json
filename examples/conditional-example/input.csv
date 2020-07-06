@@ -1,0 +1,4 @@
+Item,Price,Quantity,Purchase Date,Days Until Sold
+ice cream cone,$1,10,1999-04-05,60
+chocolate bar,$2,20,1999-04-05
+pasta,$2,40,1999-04-05,45
