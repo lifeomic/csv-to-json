@@ -4,7 +4,8 @@ disable=unused-argument,
         wildcard-import,
         undefined-variable,
         import-error,
-        no-name-in-module
+        no-name-in-module,
+        too-many-arguments
 
 [VARIABLES]
 

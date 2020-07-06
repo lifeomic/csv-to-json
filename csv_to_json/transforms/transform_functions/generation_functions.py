@@ -89,13 +89,14 @@ def occupied(cell_value):
 
 
 def fill_from_dictionary(mapping, key, transform, df, index, dicts):
-    key = transform['key']
-    if isinstance(key, dict):
+    """Fills in object values from a dictionary file"""
+    dict_key = transform['key']
+    if isinstance(dict_key, dict):
         source_col = transform['key']['sourceCol']
-        key = df[source_col][index]
+        dict_key = df[source_col][index]
     name = transform['dictionaryName']
-    fill_value = (dicts[name][key]
-                  if name in dicts and key in dicts[name] else None)
+    fill_value = (dicts[name][dict_key]
+                  if name in dicts and dict_key in dicts[name] else None)
     del mapping[key]['transforms']
     mapping[key] = fill_value
 

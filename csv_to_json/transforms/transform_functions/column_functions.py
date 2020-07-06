@@ -117,11 +117,12 @@ def string_concatenation(sub_map, df, source_col, op_col):
 
 
 def substring(sub_map, df, source_col, op_col):
-    startIndex = int(sub_map['startIndex']
-                     ) if 'startIndex' in sub_map else 0
-    endIndex = int(sub_map['endIndex']) if 'endIndex' in sub_map else None
+    """Takes a substring of every string in the column"""
+    start_index = int(sub_map['startIndex']
+                      ) if 'startIndex' in sub_map else 0
+    end_index = int(sub_map['endIndex']) if 'endIndex' in sub_map else None
     df[op_col] = df[op_col].transform(
-        lambda x: x[startIndex:endIndex] if not pd.isnull(x) else x)
+        lambda x: x[start_index:end_index] if not pd.isnull(x) else x)
     return df
 
 

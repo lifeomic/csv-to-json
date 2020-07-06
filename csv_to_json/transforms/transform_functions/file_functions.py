@@ -14,7 +14,7 @@ def dictionary_from_file(transform, df, dicts):
     """Creates a dictionary from the supplied transform"""
     name = transform['dictionaryName']
     input_file = transform['inputFile']
-    separation = transform['separation'] if 'separation' in transform else None
+    separation = transform['separation'] if 'separation' in transform else ','
     key_col = transform['keyCol']
     value_col = transform['valueCol']
     input_df = pd.read_csv(input_file, dtype='str', sep=separation)

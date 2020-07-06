@@ -11,10 +11,10 @@ def test_deletion_conditional():
         'sourceCol': 'value_one',
         'compareTo': 'foo'
     }
-    deletion_conditional(mapping, 'key', conditional, df, 0)
+    deletion_conditional(mapping, 'key', conditional, df, 0, {})
     assert 'key' in mapping and mapping['key'] == 'bar'
     df = pd.DataFrame.from_dict({'value_one': ['bar']})
-    deletion_conditional(mapping, 'key', conditional, df, 0)
+    deletion_conditional(mapping, 'key', conditional, df, 0, {})
     assert not mapping and 'key' not in mapping
 
 
@@ -39,7 +39,7 @@ def test_standard_conditional():
         }
     }
     standard_conditional(
-        mapping, 'value', mapping['value']['transforms'][0], df, 0)
+        mapping, 'value', mapping['value']['transforms'][0], df, 0, {})
     assert mapping['value'] == 'bar'
     df = pd.DataFrame.from_dict(
         {'value_one': ['bar'], 'fill_in_value': ['baz']})
@@ -62,7 +62,7 @@ def test_standard_conditional():
         }
     }
     standard_conditional(
-        mapping, 'value', mapping['value']['transforms'][0], df, 0)
+        mapping, 'value', mapping['value']['transforms'][0], df, 0, {})
     assert ('sourceCol' in mapping['value'] and
             mapping['value']['sourceCol'] == 'fill_in_value')
 
@@ -195,3 +195,24 @@ def test_empty():
 def test_occupied():
     assert occupied('foo')
     assert not occupied(None)
+
+
+def test_fill_from_dictionary():
+    df = pd.DataFrame.from_dict({'col_one': ['foo']})
+    dicts = {'dict_one': {'foo': 'bar', 'bar': 'baz'}}
+    mapping = {
+        'test_value': {
+            'transforms': [
+                {
+                    'type': 'fill-from-dictionary',
+                    'key': {
+                        'sourceCol': 'col_one'
+                    },
+                    'dictionaryName': 'dict_one'
+                }
+            ]
+        }
+    }
+    fill_from_dictionary(mapping, 'test_value',
+                         mapping['test_value']['transforms'][0], df, 0, dicts)
+    assert mapping['test_value'] == 'bar'
