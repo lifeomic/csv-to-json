@@ -7,6 +7,7 @@ Note that the order for transform types is file transformations then column tran
 These transformations apply to the entire supplied .csv file and occur before any other transformations.
 
 - transpose: Switches rows and columns of the inputted .csv file
+- dictionary-from-file: Creates a dictionary from an additional **inputFile** that can be used (see fill-from-dictionary generation transform); a **dictionaryName**, **keyCol**, and **valueCol** must also be provided; **separation** is optional and defaults to ',' for comma-separated values
 
 ## Column Transformations
 
@@ -28,9 +29,11 @@ These transformations apply to a specific column in the supplied .csv file. They
 
 ## JSON Structure Transformations
 
+- fill-from-dictionary: Fills in values from a dictionary that was created with the dictionary-from-file file transform; **dictionaryName** must be provided along with a **key** for the value that should be accessed from the dictionary; **key** can be a fixed or column value
+
 ### Conditionals
 
-Conditionals are a more advanced transform type that perform a conditional check on the given values. Note that **empty** and **occupied** are accepted as **compareTo** values with the **eq** **comparison**. **empty** returns true if the given cell is empty and false otherwise. **occupied** returns true if the given cell is occupied and false otherwise.
+Conditionals are a more advanced type of generation transform that perform a conditional check on the given values. Note that **empty** and **occupied** are accepted as **compareTo** values with the **eq** **comparison**. **empty** returns true if the given cell is empty and false otherwise. **occupied** returns true if the given cell is occupied and false otherwise.
 
 - conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; a **values** object must be provided in the transform with a **true** value and a **false** value; **true** and **false** can be fixed or column values
 - deletion-conditional: Compares the **sourceCol** to the **compareTo** based on the **comparison**; if the condition evaluates to false, the object the transformation applies to and all sub-objects are not included in the output; if the condition evaluates to true, the object the transformation applies to will be included in the output; if multiple deletion-conditions are included, they are automatically ANDED together, meaning all deletion-conditionals present must evaluate to true for the object to be included in the output
