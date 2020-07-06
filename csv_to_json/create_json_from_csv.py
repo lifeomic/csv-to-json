@@ -38,10 +38,11 @@ if __name__ == '__main__':
     input_df = pd.read_csv(input_file, dtype='str', sep=separation)
     with open(map_file, 'r') as mp:
         mappings = json.load(mp)
-    mappings, input_df = perform_file_transforms(mappings, input_df)
+    file_dictionaries = {}
+    mappings, input_df, file_dictionaries = perform_file_transforms(
+        mappings, input_df, file_dictionaries)
     mappings, input_df = perform_column_transforms(mappings, input_df)
-    if output_file:
-        input_df = perform_generation_transforms(
-            mappings, input_df, output_file)
+    input_df = perform_generation_transforms(
+        mappings, input_df, output_file, file_dictionaries)
     if output_csv:
         input_df.to_csv(output_csv)
