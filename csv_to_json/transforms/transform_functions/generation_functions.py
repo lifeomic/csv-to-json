@@ -3,7 +3,7 @@
 import pandas as pd
 
 
-def deletion_conditional(mapping, key, conditional, df, index):
+def deletion_conditional(mapping, key, conditional, df, index, dicts):
     """Deletes the given key from the mapping if the condition is false"""
     if (not check_conditional(conditional, df, index) and
             (isinstance(mapping, list) or (isinstance(mapping, dict) and
@@ -11,7 +11,7 @@ def deletion_conditional(mapping, key, conditional, df, index):
         del mapping[key]
 
 
-def standard_conditional(mapping, key, conditional, df, index):
+def standard_conditional(mapping, key, conditional, df, index, dicts):
     """Sets the given key from the mapping to the true value if
        true or to the false value if false"""
     if check_conditional(conditional, df, index):
@@ -86,6 +86,18 @@ def empty(cell_value):
 def occupied(cell_value):
     """Returns true if the cell value is not null, false otherwise"""
     return not pd.isnull(cell_value)
+
+
+def fill_from_dictionary(mapping, key, transform, df, index, dicts):
+    key = transform['key']
+    if isinstance(key, dict):
+        source_col = transform['key']['sourceCol']
+        key = df[source_col][index]
+    name = transform['dictionaryName']
+    fill_value = (dicts[name][key]
+                  if name in dicts and key in dicts[name] else None)
+    del mapping[key]['transforms']
+    mapping[key] = fill_value
 
 
 available_comparison_values = {

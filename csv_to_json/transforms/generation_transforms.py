@@ -31,7 +31,7 @@ def item_generator(sub_map, lookup_key):
             yield from item_generator(list_item, lookup_key)
 
 
-def perform_generation_transforms(mappings, df, output_file):
+def perform_generation_transforms(mappings, df, output_file, dicts):
     """Performs all generation transforms on the dataframe and outputs"""
     out = open(output_file, 'w')
     for index in df.index:
@@ -45,7 +45,7 @@ def perform_generation_transforms(mappings, df, output_file):
                                         available_transforms,
                                         sub_map_copy[key]['transforms']):
                     available_transforms[transform['type']](
-                        sub_map, key, transform, df, index)
+                        sub_map, key, transform, df, index, dicts)
                 if key in sub_map and 'transforms' in sub_map[key]:
                     del sub_map[key]['transforms']
         for sub_map in filter(lambda x: isinstance(x, list), sub_maps):
@@ -59,7 +59,7 @@ def perform_generation_transforms(mappings, df, output_file):
                                         list_item['transforms']):
                     if not list_index >= len(sub_map):
                         available_transforms[transform['type']](
-                            sub_map, list_index, transform, df, index)
+                            sub_map, list_index, transform, df, index, dicts)
                 if (not list_index >= len(sub_map) and
                         'transforms' in sub_map[list_index]):
                     del sub_map[list_index]['transforms']
@@ -73,5 +73,6 @@ def perform_generation_transforms(mappings, df, output_file):
 
 available_transforms = {
     'deletion-conditional': deletion_conditional,
-    'conditional': standard_conditional
+    'conditional': standard_conditional,
+    'fill-from-dictionary': fill_from_dictionary
 }
