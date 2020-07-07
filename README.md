@@ -6,7 +6,21 @@ The CSV to JSON Mapping Tool is a script that allow one to transform each row (o
 
 There are several simple example input files, mapping files, and output files in the examples directory.
 
-## Usage
+## Setup and Usage
+
+Create the virtualenv and local package
+
+```bash
+make setup-env
+```
+
+Activate the virtualenv
+
+```bash
+source venv/bin/activate
+```
+
+Run the program
 
 ```bash
 python3 csv-to-json/create_json_from_csv.py --help
@@ -26,7 +40,7 @@ make lint
 
 ## Docker Container
 
-This repo already contains a valid Dockerfile and a .dockerignore file. To create a docker container containing only the scripts necessary to run the program, run the following command.
+This repo contains a valid Dockerfile and a .dockerignore file. To create a docker container containing the scripts necessary to run the program, run the following command.
 
 ```bash
 docker build -t <tag name> .

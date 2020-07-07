@@ -1,0 +1,45 @@
+{
+  "name": "CSV to JSON",
+  "datasetId": "<dataset id>",
+  "inputs": [
+    {
+      "type": "FILE",
+      "url": "<input file url>",
+      "path": "/tmp/in.csv"
+    },
+    {
+      "type": "FILE",
+      "url": "<mapping file url>",
+      "path": "/tmp/mapping.json"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/out",
+      "url": "<project url>",
+      "type": "DIRECTORY"
+    }
+  ],
+  "resources": {
+    "cpu_cores": 1,
+    "ram_gb": 4
+  },
+  "executors": [
+    {
+      "workdir": "/tmp",
+      "image": "<docker image>",
+      "command": [
+        "python3",
+        "/usr/src/app/csv_to_json/create_json_from_csv.py",
+        "-i",
+        "/tmp/in.csv",
+        "-o",
+        "/out/out.csv",
+        "-m",
+        "/tmp/mapping.json"
+      ],
+      "stderr": "/out/stderr.txt",
+      "stdout": "/out/stdout.txt"
+    }
+  ]
+}

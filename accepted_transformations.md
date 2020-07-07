@@ -7,7 +7,7 @@ Note that the order for transform types is file transformations then column tran
 These transformations apply to the entire supplied .csv file and occur before any other transformations. Note that these transforms must be placed as the first item in the JSON in a list under the name 'file-transforms'.
 
 - transpose: Switches rows and columns of the inputted .csv file
-- dictionary-from-file: Creates a dictionary (set of key-value pairs) from an additional **inputFile** that can be used (see fill-from-dictionary generation transform); a **dictionaryName**, **keyCol**, and **valueCol** must also be provided; **separation** is optional and defaults to ',' for comma-separated values
+- dictionary-from-file: Creates a dictionary (set of key-value pairs) from an additional **inputFile** that can be used for certain transformations (see fill-from-dictionary generation transform); a **dictionaryName**, **keyCol**, and **valueCol** must also be provided; **separation** is optional and defaults to ',' for comma-separated values
 
 ## Column Transformations
 
